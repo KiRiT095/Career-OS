@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CareerOS{% endblock %} · CareerOS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="{% if not g.user %}auth-body{% endif %}">
+{% if g.user %}
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">C</span><span><b>CareerOS</b><small>Placement Roadmap</small></span></a>
+    <div class="side-label">WORKSPACE</div>
+    <nav class="side-nav">
+      <a class="{% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><span>◫</span> Dashboard</a>
+      <a class="{% if request.endpoint == 'roadmap' %}active{% endif %}" href="{{ url_for('roadmap') }}"><span>⌁</span> My Roadmap</a>
+      <a class="{% if request.endpoint == 'dsa' %}active{% endif %}" href="{{ url_for('dsa') }}"><span>⌘</span> DSA Tracker</a>
+      <a class="{% if request.endpoint == 'cgpa_tracker' %}active{% endif %}" href="{{ url_for('cgpa_tracker') }}"><span>◷</span> CGPA Planner</a>
+      <a class="{% if request.endpoint == 'applications' %}active{% endif %}" href="{{ url_for('applications') }}"><span>▣</span> Applications</a>
+      <a class="{% if request.endpoint == 'hackathons' %}active{% endif %}" href="{{ url_for('hackathons') }}"><span></span> Hackathons</a>
+      <a class="{% if request.endpoint == 'certifications' %}active{% endif %}" href="{{ url_for('certifications') }}"><span>◇</span> Certifications</a>
+      <a class="{% if request.endpoint == 'resume' %}active{% endif %}" href="{{ url_for('resume') }}"><span>▤</span> Resume Builder</a>
+      <a class="{% if request.endpoint == 'resources' %}active{% endif %}" href="{{ url_for('resources') }}"><span>▥</span> Resource Library</a>
+      {% if g.user['role'] == 'admin' %}<a class="{% if request.endpoint == 'admin' %}active{% endif %}" href="{{ url_for('admin') }}"><span></span> Admin Panel</a>{% endif %}
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="side-promo"><div class="promo-rocket">↗</div><b>Keep learning.<br>Keep growing!</b><p>Your next opportunity starts with one small step.</p></div>
+      <a class="user-mini" href="{{ url_for('logout') }}"><span class="avatar">{{ g.user['name'][0]|upper }}</span><span class="user-mini-text"><b>{{ g.user['name'] }}</b><small>{{ g.user['role']|capitalize }} · Sign out</small></span><span class="logout-arrow">↗</span></a>
+    </div>
+  </aside>
+  <main class="main-area">
+    <header class="topbar"><div class="mobile-brand"><span class="brand-mark">C</span><b>CareerOS</b></div><div class="crumb">Placement Roadmap <span>/</span> {% block crumb %}Dashboard{% endblock %}</div><div class="topbar-right"><span class="top-chip"> Your career, organized</span><span class="avatar avatar-small">{{ g.user['name'][0]|upper }}</span></div></header>
+    <div class="page-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}<button type="button" onclick="this.parentElement.remove()">×</button></div>{% endfor %}</div>{% endif %}{% endwith %}
+      {% block content %}{% endblock %}
+      <footer class="footer">CareerOS <span>·</span> Plan. Learn. Track. Get Hired. <span class="footer-right">Mini project prototype · {{ current_year }}</span></footer>
+    </div>
+  </main>
+</div>
+{% else %}
+  {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="auth-flashes">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+  {% block auth_content %}{% endblock %}
+{% endif %}
+<script src="{{ url_for('static', filename='main.js') }}" defer></script>
+</body></html>
