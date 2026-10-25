@@ -68,21 +68,46 @@ def create_app(test_config=None):
         def close(self):
             self.connection.close()
 
+
     def connect_db():
-        if app.config.get("DATABASE_URL"):
+        database_url = app.config.get("DATABASE_URL")
+
+        if database_url:
             import psycopg
+
+
             def row_factory(cursor):
+                if cursor.description is None:
+                    return None
+
                 columns = [column.name for column in cursor.description]
+
                 def build_row(values):
-                    converted = [value.isoformat(sep=" ") if isinstance(value, datetime) else value for value in values]
+                    converted = [
+                        value.isoformat(sep=" ") if isinstance(value, datetime) else value
+                        for value in values
+                    ]
                     return HybridRow(zip(columns, converted))
+
                 return build_row
-            connection = psycopg.connect(app.config["DATABASE_URL"], row_factory=row_factory)
+
+
+            connection = psycopg.connect(
+                database_url,
+                row_factory=row_factory
+            )
             return PostgresConnection(connection)
+
+        if os.environ.get("VERCEL"):
+            raise RuntimeError(
+                "DATABASE_URL is missing. Configure PostgreSQL in Vercel."
+            )
+
         connection = sqlite3.connect(app.config["DATABASE"])
         connection.row_factory = sqlite3.Row
         connection.execute("PRAGMA foreign_keys = ON")
         return connection
+
 
     def init_db():
         db = connect_db()
@@ -188,9 +213,28 @@ def create_app(test_config=None):
                 updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             );
         """
+
         if app.config.get("DATABASE_URL"):
-            schema = schema.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "SERIAL PRIMARY KEY")
-        db.executescript(schema)
+            schema = schema.replace(
+                "INTEGER PRIMARY KEY AUTOINCREMENT",
+                "SERIAL PRIMARY KEY"
+            )
+            schema = schema.replace(
+                "solved_on TEXT NOT NULL DEFAULT CURRENT_DATE",
+                "solved_on TEXT NOT NULL DEFAULT (CURRENT_DATE::text)"
+            )
+            schema = schema.replace(
+                "DEFAULT CURRENT_TIMESTAMP",
+                "DEFAULT (CURRENT_TIMESTAMP::text)"
+            )
+
+        if app.config.get("DATABASE_URL"):
+            for statement in schema.split(";"):
+                if statement.strip():
+                    db.execute(statement)
+        else:
+            db.executescript(schema)
+
         seed_db(db)
         db.commit()
         db.close()

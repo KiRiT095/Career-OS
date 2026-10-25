@@ -11,3 +11,9 @@ uploads/*
 !uploads/.gitkeep
 
 .DS_Store
+# Local project documentation
+PROJECT_NOTES.md
+EXHIBITION_GUIDE.md
+
+# Local editor settings
+.vscode/
