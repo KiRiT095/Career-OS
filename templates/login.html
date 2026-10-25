@@ -1,5 +1,106 @@
-{% extends 'base.html' %}{% block title %}Welcome{% endblock %}
+
+{% extends 'base.html' %}
+
+{% block title %}Welcome{% endblock %}
+
 {% block auth_content %}
-<div class="auth-layout"><section class="auth-hero"><a class="brand brand-light" href="{{ url_for('login') }}"><span class="brand-mark">C</span><span><b>CareerOS</b><small>Placement Roadmap</small></span></a><div class="auth-hero-copy"><span class="eyebrow eyebrow-light">YOUR CAREER, ONE DASHBOARD</span><h1>Build your future.<br><em>One step at a time.</em></h1><p>Bring your learning, applications and placement preparation together in one simple workspace.</p><div class="hero-points"><span> Personal roadmap</span><span> Track your progress</span><span> Find learning resources</span></div></div><div class="hero-stats"><div><strong>01</strong><span>Plan your path</span></div><div><strong>02</strong><span>Build your skills</span></div><div><strong>03</strong><span>Get placement-ready</span></div></div><div class="hero-orb orb-one"></div><div class="hero-orb orb-two"></div></section>
-<section class="auth-panel"><div class="auth-form-wrap"><span class="eyebrow">WELCOME BACK</span><h2>Sign in to CareerOS</h2><p class="muted">Pick up where you left off.</p><form method="post" class="form-stack"><label>Email address<input type="email" name="email" placeholder="you@college.edu" required autocomplete="username"></label><label>Password<input type="password" name="password" placeholder="Enter your password" required autocomplete="current-password"></label><button class="btn btn-primary btn-full" type="submit">Sign in <span>→</span></button></form><p class="auth-switch">New to CareerOS? <a href="{{ url_for('register') }}">Create an account</a></p><div class="demo-box"><div class="demo-box-title">Demo accounts</div><p><b>Student:</b> student@careeros.local <span>·</span> student123</p><p><b>Admin:</b> admin@careeros.local <span>·</span> admin123</p></div><p class="auth-disclaimer">Local educational prototype · Do not use a personal password.</p></div></section></div>
+<div class="auth-layout">
+    <section class="auth-hero">
+        <a class="brand brand-light" href="{{ url_for('login') }}">
+            <span class="brand-mark">C</span>
+            <span>
+                <b>CareerOS</b>
+                <small>Placement Roadmap</small>
+            </span>
+        </a>
+
+        <div class="auth-hero-copy">
+            <span class="eyebrow eyebrow-light">
+                YOUR CAREER, ONE DASHBOARD
+            </span>
+
+            <h1>
+                Build your future.<br>
+                <em>One step at a time.</em>
+            </h1>
+
+            <p>
+                Bring your learning, applications and placement preparation
+                together in one simple workspace.
+            </p>
+
+            <div class="hero-points">
+                <span>Personal roadmap</span>
+                <span>Track your progress</span>
+                <span>Find learning resources</span>
+            </div>
+        </div>
+
+        <div class="hero-stats">
+            <div>
+                <strong>01</strong>
+                <span>Plan your path</span>
+            </div>
+
+            <div>
+                <strong>02</strong>
+                <span>Build your skills</span>
+            </div>
+
+            <div>
+                <strong>03</strong>
+                <span>Get placement-ready</span>
+            </div>
+        </div>
+
+        <div class="hero-orb orb-one"></div>
+        <div class="hero-orb orb-two"></div>
+    </section>
+
+    <section class="auth-panel">
+        <div class="auth-form-wrap">
+            <span class="eyebrow">WELCOME BACK</span>
+
+            <h2>Sign in to CareerOS</h2>
+            <p class="muted">Pick up where you left off.</p>
+
+            <form method="post" class="form-stack">
+                <label>
+                    Email address
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="you@college.edu"
+                        required
+                        autocomplete="username"
+                    >
+                </label>
+
+                <label>
+                    Password
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                        autocomplete="current-password"
+                    >
+                </label>
+
+                <button class="btn btn-primary btn-full" type="submit">
+                    Sign in <span>→</span>
+                </button>
+            </form>
+
+            <p class="auth-switch">
+                New to CareerOS?
+                <a href="{{ url_for('register') }}">Create an account</a>
+            </p>
+
+            <p class="auth-disclaimer">
+                Local educational prototype · Do not use a personal password.
+            </p>
+        </div>
+    </section>
+</div>
 {% endblock %}
